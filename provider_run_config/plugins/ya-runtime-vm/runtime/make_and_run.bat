@@ -1,2 +1,0 @@
-cmd /c wsl make
-cmd /c qemu-system-x86_64.exe -m 1G -nographic -vga none -kernel vmlinuz-virt -initrd initramfs.cpio.gz -net none -smp 2 -append "console=ttyS0 panic=1" -device virtio-serial -chardev socket,id=manager_cdev,host=127.0.0.1,port=9003,server,nowait -chardev socket,id=net_cdev,host=127.0.0.1,port=9004,server,nowait -device virtserialport,chardev=manager_cdev,name=manager_port -device virtserialport,chardev=net_cdev,name=net_port -drive file=ubuntu.gvmi,cache=unsafe,readonly=on,format=raw,if=virtio -no-reboot -accel whpx  -nodefaults --serial stdio

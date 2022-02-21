@@ -10,6 +10,8 @@ target_runtime_directory = r"plugins\ya-runtime-vm\runtime"
 source_runtime_exe_directory = r"C:\golem\ya-runtime-vm\target\debug"
 target_runtime_exe_directory = r"plugins\ya-runtime-vm"
 
+source_fileserver_directory = r"C:\scx1332\FileServer9p\rust-9p\example\unpfs\target\release"
+target_fileserver_directory = r"plugins\ya-runtime-vm\runtime"
 
 def copy_file_local(srcDir, targetDir):
     if os.path.isfile(srcDir):
@@ -29,9 +31,11 @@ copy_file_local(os.path.join(source_runtime_directory, "vmlinuz-virt"), target_r
 
 copy_file_local(os.path.join(source_runtime_exe_directory, "ya-runtime-vm.exe"), target_runtime_exe_directory)
 
+copy_file_local(os.path.join(source_fileserver_directory, "ya-vm-file-server.exe"), target_fileserver_directory)
+
 yaprovider_exe_path = r"ya-provider.exe"
 
-payment_init = Popen(f"{yagna_exe_path} payment init --receiver --network mumbai --account 0xc596aee002ebe98345ce3f967631aaf79cfbdf41", shell=True)
+payment_init = Popen(f"{yagna_exe_path} payment init --receiver --network rinkeby --account 0xc596aee002ebe98345ce3f967631aaf79cfbdf41", shell=True)
 
 p1 = Popen(f"{yaprovider_exe_path} run", shell=True)
 

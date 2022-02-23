@@ -5,9 +5,10 @@ import json
 
 def init_payments_debug():
     if platform == "win32":
-        command = "yagna payment init --sender --network mumbai"
+        command = "yagna payment init --sender --network rinkeby"
         print("Running: " + command)
         os.system(command)
+        
 
 
 
@@ -50,7 +51,9 @@ def gather_info():
             print("MULTIPLE KEYS FOUND, RETURNING FIRST")
 
         yagna_appkey = obj["values"][0][key_idx]
-        print("Your yagna appkey: " + yagna_appkey)
+        print(f"Your yagna appkey: {yagna_appkey}")
+
+        print(f"SET YAGNA_APPKEY={yagna_appkey}")
 
 
 

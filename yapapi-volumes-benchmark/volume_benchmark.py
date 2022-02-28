@@ -1,21 +1,28 @@
 #!/usr/bin/env python3
 import asyncio
 from typing import AsyncIterable
-
+import os
 from yapapi import Golem, Task, WorkContext
 from yapapi.log import enable_default_logger
 from yapapi.payload import vm
+import pathlib
 
+async def worker(ctx: WorkContext, tasks: AsyncIterable[Task]):
+    script_dir = pathlib.Path(__file__).resolve().parent
+    scene_path = str(script_dir / "vol_test.py")
 
-async def worker(context: WorkContext, tasks: AsyncIterable[Task]):
+    print(scene_path)
+
     async for task in tasks:
-        script = context.new_script()
+        script = ctx.new_script()
+        script.upload_file(scene_path, "/golem/input/script.py")
         folder = "/golem/output"
-        bigfilesize = 10000
+        bigfilesize = 1000000000
         repetitions = 10
 
 
-        future_result = script.run("/usr/local/bin/python", "vol_test.py", "--folder", folder, "--bigfilesize", str(bigfilesize), "--repetitions", str(repetitions))
+
+        future_result = script.run("/usr/local/bin/python", "/golem/input/script.py", "--folder", folder, "--bigfilesize", str(bigfilesize), "--repetitions", str(repetitions))
 
         yield script
 
@@ -31,8 +38,8 @@ async def main():
     tasks = [Task(data=None)]
 
     async with Golem(budget=1.0,
-                     subnet_tag="scx_vm_subnet",
-                     #subnet_tag="testnet",
+                     #subnet_tag="scx_vm_subnet",
+                     subnet_tag="testnet",
                      payment_network="rinkeby") as golem:
         async for completed in golem.execute_tasks(worker, tasks, payload=package):
             print(completed.result.stdout)
@@ -41,6 +48,6 @@ async def main():
 if __name__ == "__main__":
     enable_default_logger(log_file="hello.log")
 
-    loop = asyncio.get_event_loop()
+    loop = asyncio.new_event_loop()
     task = loop.create_task(main())
     loop.run_until_complete(task)

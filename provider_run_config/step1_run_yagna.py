@@ -25,5 +25,6 @@ copy_file_local(os.path.join(source_yagna_directory, yagna_exe), target_yagna_di
 
 command = f".{os.path.sep}{yagna_exe} service run"
 print(command)
-p1 = Popen(command, shell=True)
+with Popen(command, shell=True) as p1:
+    pass
 

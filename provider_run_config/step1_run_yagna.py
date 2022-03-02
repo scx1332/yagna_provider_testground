@@ -16,8 +16,8 @@ def copy_file_local(srcDir, targetDir):
         print("Copying and overwriting file: {} => {}".format(srcDir, targetDir))
         shutil.copy2(srcDir, targetDir)
     else:
-	    print("Yagna.exe not found, alter config.json")
-	    sys.exit()
+        print("Yagna.exe not found, alter config.json")
+        sys.exit()
 
 
 yagna_exe = config_params["yagna_executable"]

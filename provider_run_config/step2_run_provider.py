@@ -40,6 +40,8 @@ copy_file_local(os.path.join(ya_runtime_vm_directory, "runtime", "init-container
 
 copy_file_local(os.path.join(ya_runtime_vm_directory, "target", "debug", "ya-runtime-vm.exe"), target_runtime_exe_directory)
 
+copy_file_local(os.path.join(ya_runtime_vm_directory, "target", "debug", "ya-runtime-vm.exe"), target_runtime_exe_directory)
+
 if platform.system() == "Windows":
     source_fileserver_directory = config_params["step2"]["source_fileserver_directory"]
     target_fileserver_directory = r"plugins\ya-runtime-vm\runtime"
@@ -50,6 +52,10 @@ if platform.system() == "Windows":
 else:
     yaprovider_exe = r"ya-provider"
 
+
+source_yagna_directory = config_params["source_yagna_directory"]
+target_yagna_directory = "."
+copy_file_local(os.path.join(source_yagna_directory, yaprovider_exe), target_yagna_directory)
 
 
 payment_init_command = f".{os.path.sep}{yagna_exe} payment init --receiver --network rinkeby"

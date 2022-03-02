@@ -18,7 +18,7 @@ config_params = open_config()
 
 
 
-source_yagna_directory = config_params["step1"]["source_yagna_directory"]
+source_yagna_directory = config_params["source_yagna_directory"]
 target_yagna_directory = r"."
 
 def copy_file_local(srcDir, targetDir):

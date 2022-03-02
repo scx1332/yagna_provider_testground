@@ -2,18 +2,18 @@
   "yagna_executable" : "yagna.exe",
 
   "step1": {
-    "source_yagna_directory" : "C:/golem/yagna/target/debug",
+    "source_yagna_directory" : "P:/_GOLEM/yagna/target/debug",
     "source_runtime_directory" : "C:/golem/ya-runtime-vm/runtime/init-container"
   },
   "step2": {
-    "source_runtime_directory" : "C:\golem\ya-runtime-vm\runtime\init-container",
-    "target_runtime_directory" : "plugins\ya-runtime-vm\runtime",
+    "source_runtime_directory" : "C:/golem/ya-runtime-vm/runtime/init-container",
+    "target_runtime_directory" : "plugins/ya-runtime-vm/runtime",
 
-    "source_runtime_exe_directory" : "C:\golem\ya-runtime-vm\target\debug",
-    "target_runtime_exe_directory" : "plugins\ya-runtime-vm",
+    "source_runtime_exe_directory" : "C:/golem/ya-runtime-vm/target/debug",
+    "target_runtime_exe_directory" : "plugins/ya-runtime-vm",
 
-    "source_fileserver_directory" : "C:\scx1332\FileServer9p\rust-9p\example\unpfs\target\release",
-    "target_fileserver_directory" : "plugins\ya-runtime-vm\runtime"
+    "source_fileserver_directory" : "C:/scx1332/FileServer9p/rust-9p/example/unpfs/target/release",
+    "target_fileserver_directory" : "plugins/ya-runtime-vm/runtime"
   }
 
 }

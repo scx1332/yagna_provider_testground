@@ -45,14 +45,18 @@ if platform.system() == "Windows":
     target_fileserver_directory = r"plugins\ya-runtime-vm\runtime"
     copy_file_local(os.path.join(source_fileserver_directory, "ya-vm-file-server.exe"), target_fileserver_directory)
 
-yaprovider_exe_path = r"ya-provider.exe"
+if platform.system() == "Windows":
+    yaprovider_exe = r"ya-provider.exe"
+else:
+    yaprovider_exe = r"ya-provider"
 
 
-payment_init_command = f".{os.path.sep}{yagna_exe} payment init --receiver --network rinkeby --account 0xc596aee002ebe98345ce3f967631aaf79cfbdf41"
+
+payment_init_command = f".{os.path.sep}{yagna_exe} payment init --receiver --network rinkeby"
 print(payment_init_command)
 payment_init = Popen(payment_init_command, shell=True)
 
 
-#with Popen(f"{yaprovider_exe_path} run", shell=True) as p1:
-#    pass
+with Popen(f".{os.path.sep}{yaprovider_exe} run", shell=True) as p1:
+    pass
 

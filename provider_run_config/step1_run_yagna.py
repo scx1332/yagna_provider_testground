@@ -10,8 +10,6 @@ with open("config.json", "r") as f:
 source_yagna_directory = config_params["source_yagna_directory"]
 target_yagna_directory = r"."
 
-print(config_params)
-
 def copy_file_local(srcDir, targetDir):
     if os.path.isfile(srcDir):
         print("Copying and overwriting file: {} => {}".format(srcDir, targetDir))
@@ -21,7 +19,7 @@ def copy_file_local(srcDir, targetDir):
 yagna_exe = config_params["yagna_executable"]
 copy_file_local(os.path.join(source_yagna_directory, yagna_exe), target_yagna_directory)
 
-command = f"{yagna_exe} service run"
+command = f".{os.path.sep}{yagna_exe} service run"
 print(command)
 p1 = Popen(command, shell=True)
 

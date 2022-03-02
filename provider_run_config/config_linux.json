@@ -6,7 +6,8 @@
     "source_runtime_directory" : "/home/szym/golem/ya-runtime-vm/runtime/init-container"
   },
   "step2": {
-    
+    "ya_runtime_vm_directory" : "/home/szym/golem/ya-runtime-vm",
+    "qemu_executable" : "vmrt"
   }
 
 }

@@ -1,0 +1,12 @@
+{
+  "yagna_executable" : "yagna",
+  
+  "step1": {
+    "source_yagna_directory" : "/home/szym/golem/yagna/target/debug",
+    "source_runtime_directory" : "/home/szym/golem/ya-runtime-vm/runtime/init-container"
+  },
+  "step2": {
+    
+  }
+
+}

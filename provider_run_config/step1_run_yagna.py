@@ -1,14 +1,24 @@
 import os
+import platform
 import shutil
 import sys
 from subprocess import Popen
 import json
 
-config_params = {}
-with open("config.json", "r") as f:
-    config_params = json.loads(f.read())
+def open_config():
+    if platform.system() == "Linux":
+        config_path="config_linux.json"
+    else:
+        config_path="config.json"
 
-source_yagna_directory = config_params["source_yagna_directory"]
+    with open(config_path, "r") as f:
+        return json.loads(f.read())
+
+config_params = open_config()
+
+
+
+source_yagna_directory = config_params["step1"]["source_yagna_directory"]
 target_yagna_directory = r"."
 
 def copy_file_local(srcDir, targetDir):

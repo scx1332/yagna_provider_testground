@@ -1,5 +1,12 @@
 {
-  "source_yagna_directory" : "C:/golem/yagna/target/debug",
   "yagna_executable" : "yagna.exe",
-  "source_runtime_directory" : "C:/golem/ya-runtime-vm/runtime/init-container"
+
+  "step1": {
+    "source_yagna_directory" : "C:/golem/yagna/target/debug",
+    "source_runtime_directory" : "C:/golem/ya-runtime-vm/runtime/init-container"
+  },
+  "step2": {
+
+  }
+
 }

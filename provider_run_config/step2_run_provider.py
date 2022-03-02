@@ -24,9 +24,12 @@ target_runtime_exe_directory = r"plugins\ya-runtime-vm"
 
 
 def copy_file_local(srcDir, targetDir):
-    if os.path.isfile(srcDir):
+    # if os.path.isfile(srcDir):
+    try:
         print("Copying and overwriting file: {} => {}".format(srcDir, targetDir))
         shutil.copy2(srcDir, targetDir)
+    except Exception as e:
+        print(f"ERROR: while copying file {srcDir}, reason {e}")
 
 qemu_executable = config_params["step2"]["qemu_executable"]
 
@@ -38,19 +41,16 @@ copy_file_local(os.path.join(ya_runtime_vm_directory, "runtime", "image", "self-
 copy_file_local(os.path.join(ya_runtime_vm_directory, "runtime", "init-container", "initramfs.cpio.gz"), target_runtime_directory)
 copy_file_local(os.path.join(ya_runtime_vm_directory, "runtime", "init-container", "vmlinuz-virt"), target_runtime_directory)
 
-copy_file_local(os.path.join(ya_runtime_vm_directory, "target", "debug", "ya-runtime-vm.exe"), target_runtime_exe_directory)
+ya_runtime_vm_exe = config_params["ya_runtime_vm_executable"]
 
-copy_file_local(os.path.join(ya_runtime_vm_directory, "target", "debug", "ya-runtime-vm.exe"), target_runtime_exe_directory)
+copy_file_local(os.path.join(ya_runtime_vm_directory, "target", "debug", ya_runtime_vm_exe), target_runtime_exe_directory)
 
 if platform.system() == "Windows":
     source_fileserver_directory = config_params["step2"]["source_fileserver_directory"]
     target_fileserver_directory = r"plugins\ya-runtime-vm\runtime"
     copy_file_local(os.path.join(source_fileserver_directory, "ya-vm-file-server.exe"), target_fileserver_directory)
 
-if platform.system() == "Windows":
-    yaprovider_exe = r"ya-provider.exe"
-else:
-    yaprovider_exe = r"ya-provider"
+yaprovider_exe = config_params["yaprovider_exe"]
 
 
 source_yagna_directory = config_params["source_yagna_directory"]

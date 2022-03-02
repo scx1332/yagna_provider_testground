@@ -1,13 +1,16 @@
 {
   "yagna_executable" : "yagna.exe",
+  "ya_runtime_vm_executable" : "ya-runtime-vm.exe",
+  "yaprovider_exe": "ya-provider.exe",
   "source_yagna_directory" : "C:/golem/yagna/target/debug",
 
   "step1": {
+    "source_yagna_directory" : "C:/golem/yagna/target/debug",
     "source_runtime_directory" : "C:/golem/ya-runtime-vm/runtime/init-container"
   },
   "step2": {
     "ya_runtime_vm_directory" : "C:/golem/ya-runtime-vm",
-    "source_fileserver_directory" : "C:/scx1332/FileServer9p/rust-9p/example/unpfs/target/release",
     "qemu_executable" : "qemu-system-x86_64.exe"
   }
+
 }

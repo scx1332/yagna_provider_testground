@@ -2,16 +2,29 @@ import os
 from subprocess import Popen
 import shutil
 
+import json
+
+def open_config():
+    if platform.system() == "Linux":
+        config_path="config_linux.json"
+    else:
+        config_path="config.json"
+
+    with open(config_path, "r") as f:
+        return json.loads(f.read())
+
+config_params = open_config()
+
 yagna_exe_path = r"yagna.exe"
 
-source_runtime_directory = r"C:\golem\ya-runtime-vm\runtime\init-container"
-target_runtime_directory = r"plugins\ya-runtime-vm\runtime"
+source_runtime_directory = config_params["step2"]["source_runtime_directory"]
+target_runtime_directory = config_params["step2"]["target_runtime_directory"]
 
-source_runtime_exe_directory = r"C:\golem\ya-runtime-vm\target\debug"
-target_runtime_exe_directory = r"plugins\ya-runtime-vm"
+source_runtime_exe_directory = config_params["step2"]["source_runtime_exe_directory"]
+target_runtime_exe_directory = config_params["step2"]["target_runtime_exe_directory"]
 
-source_fileserver_directory = r"C:\scx1332\FileServer9p\rust-9p\example\unpfs\target\release"
-target_fileserver_directory = r"plugins\ya-runtime-vm\runtime"
+source_fileserver_directory = config_params["step2"]["source_fileserver_directory"]
+target_fileserver_directory = config_params["step2"]["target_fileserver_directory"]
 
 def copy_file_local(srcDir, targetDir):
     if os.path.isfile(srcDir):

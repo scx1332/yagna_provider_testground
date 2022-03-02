@@ -37,5 +37,6 @@ yaprovider_exe_path = r"ya-provider.exe"
 
 payment_init = Popen(f"{yagna_exe_path} payment init --receiver --network rinkeby --account 0xc596aee002ebe98345ce3f967631aaf79cfbdf41", shell=True)
 
-p1 = Popen(f"{yaprovider_exe_path} run", shell=True)
+with Popen(f"{yaprovider_exe_path} run", shell=True) as p1:
+    pass
 

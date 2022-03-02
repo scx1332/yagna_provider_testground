@@ -15,16 +15,13 @@ def open_config():
 
 config_params = open_config()
 
-yagna_exe_path = config_params["yagna_executable"]
+yagna_exe = config_params["yagna_executable"]
 
 ya_runtime_vm_directory = config_params["step2"]["ya_runtime_vm_directory"]
 target_runtime_directory = r"plugins\ya-runtime-vm\runtime"
 
-source_runtime_exe_directory = r"C:\golem\ya-runtime-vm\target\debug"
 target_runtime_exe_directory = r"plugins\ya-runtime-vm"
 
-source_fileserver_directory = r"C:\scx1332\FileServer9p\rust-9p\example\unpfs\target\release"
-target_fileserver_directory = r"plugins\ya-runtime-vm\runtime"
 
 def copy_file_local(srcDir, targetDir):
     if os.path.isfile(srcDir):
@@ -44,13 +41,16 @@ copy_file_local(os.path.join(ya_runtime_vm_directory, "runtime", "init-container
 copy_file_local(os.path.join(ya_runtime_vm_directory, "target", "debug", "ya-runtime-vm.exe"), target_runtime_exe_directory)
 
 if platform.system() == "Windows":
+    source_fileserver_directory = config_params["step2"]["source_fileserver_directory"]
+    target_fileserver_directory = r"plugins\ya-runtime-vm\runtime"
     copy_file_local(os.path.join(source_fileserver_directory, "ya-vm-file-server.exe"), target_fileserver_directory)
 
 yaprovider_exe_path = r"ya-provider.exe"
 
 
-
-#payment_init = Popen(f"{yagna_exe_path} payment init --receiver --network rinkeby --account 0xc596aee002ebe98345ce3f967631aaf79cfbdf41", shell=True)
+payment_init_command = f".{os.path.sep}{yagna_exe} payment init --receiver --network rinkeby --account 0xc596aee002ebe98345ce3f967631aaf79cfbdf41"
+print(payment_init_command)
+payment_init = Popen(payment_init_command, shell=True)
 
 
 #with Popen(f"{yaprovider_exe_path} run", shell=True) as p1:

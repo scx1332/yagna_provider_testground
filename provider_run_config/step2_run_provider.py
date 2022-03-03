@@ -15,14 +15,20 @@ def open_config():
 
 
 def create_yagna_appkey(yagna_exe):
-    proc = subprocess.Popen([yagna_exe, "app-key", "create", "auto-provider-app-key"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    command = f".{os.path.sep}{yagna_exe} app-key create auto-provider-app-key"
+    print(f"Executing command {command}")
+    
+    proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     (out, err) = proc.communicate()
     print(out)
     pass
 
 
 def extract_yagna_appkey(yagna_exe):
-    proc = subprocess.Popen([yagna_exe, "app-key", "list", "--json"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    command = f".{os.path.sep}{yagna_exe} app-key list --json"
+    print(f"Executing command {command}")
+    
+    proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     (out, err) = proc.communicate()
     yagna_response = out.decode('utf-8').strip()
     yagna_error = err.decode('utf-8').strip()
@@ -70,6 +76,7 @@ while True:
 
     if create_app_key:
         create_yagna_appkey(yagna_exe)
+        print("Yagna app-key created")
 
     tries += 1
 

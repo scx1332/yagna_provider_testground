@@ -3,6 +3,8 @@
   "ya_runtime_vm_executable" : "ya-runtime-vm",
   "yaprovider_exe": "ya-provider",
   "source_yagna_directory" : "/home/szym/golem/yagna/target/debug",
+  "exeunit_exe": "exe-unit",
+
   
   "step1": {
     "source_runtime_directory" : "/home/szym/golem/ya-runtime-vm/runtime/init-container"

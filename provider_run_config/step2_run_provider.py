@@ -34,7 +34,9 @@ def extract_yagna_appkey(yagna_exe):
     yagna_error = err.decode('utf-8').strip()
 
     print(f"yagna_response: {yagna_response}")
-    print(f"yagna_error: {yagna_error}")
+    
+    if yagna_error:
+        print(f"yagna_error: {yagna_error}")
 
     if "Called service `/local/appkey/List` is unavailable" in yagna_error:
         raise Exception("Probably cannot connect to yagna service. Check if yagna service is running.")
@@ -83,9 +85,9 @@ while True:
 
 
 ya_runtime_vm_directory = config_params["step2"]["ya_runtime_vm_directory"]
-target_runtime_directory = r"plugins\ya-runtime-vm\runtime"
 
-target_runtime_exe_directory = r"plugins\ya-runtime-vm"
+target_runtime_directory = os.path.join("plugins", "ya-runtime-vm", "runtime")
+target_runtime_exe_directory = os.path.join("plugins", "ya-runtime-vm")
 
 
 def copy_file_local(srcDir, targetDir):

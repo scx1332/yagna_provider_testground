@@ -1,3 +1,8 @@
 provider_run_config/yagna
 provider_run_config/yagna.exe
 provider_run_config/yagna_dir
+
+provider_run_config/plugins/ya-runtime-vm/runtime/bios-256k.bin
+provider_run_config/plugins/ya-runtime-vm/runtime/kvmvapic.bin
+provider_run_config/plugins/ya-runtime-vm/runtime/linuxboot_dma.bin
+provider_run_config/plugins/ya-runtime-vm/runtime/self-test.gvmi

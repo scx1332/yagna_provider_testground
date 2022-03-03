@@ -3,8 +3,8 @@
   "ya_runtime_vm_executable" : "ya-runtime-vm.exe",
   "yaprovider_exe": "ya-provider.exe",
   "exeunit_exe": "exe-unit.exe",
+  "gftp_exe": "gftp.exe",
   "source_yagna_directory" : "C:/golem/yagna/target/debug",
-
   "step1": {
     "source_yagna_directory" : "C:/golem/yagna/target/debug",
     "source_runtime_directory" : "C:/golem/ya-runtime-vm/runtime/init-container"

@@ -4,6 +4,7 @@
   "yaprovider_exe": "ya-provider",
   "source_yagna_directory" : "/home/szym/golem/yagna/target/debug",
   "exeunit_exe": "exe-unit",
+  "gftp_exe": "gftp",
 
   
   "step1": {

@@ -1,5 +1,5 @@
 import os
-from subprocess import Popen
+import subprocess
 import shutil
 import platform
 import json
@@ -13,9 +13,67 @@ def open_config():
     with open(config_path, "r") as f:
         return json.loads(f.read())
 
+
+def create_yagna_appkey(yagna_exe):
+    proc = subprocess.Popen([yagna_exe, "app-key", "create", "auto-provider-app-key"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    (out, err) = proc.communicate()
+    print(out)
+    pass
+
+
+def extract_yagna_appkey(yagna_exe):
+    proc = subprocess.Popen([yagna_exe, "app-key", "list", "--json"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    (out, err) = proc.communicate()
+    yagna_response = out.decode('utf-8').strip()
+    yagna_error = err.decode('utf-8').strip()
+
+    print(f"yagna_response: {yagna_response}")
+    print(f"yagna_error: {yagna_error}")
+
+    if "Called service `/local/appkey/List` is unavailable" in yagna_error:
+        raise Exception("Probably cannot connect to yagna service. Check if yagna service is running.")
+
+    obj = json.loads(yagna_response)
+
+    key_idx = obj["headers"].index("key")
+
+    if len(obj["values"]) == 0:
+        raise Exception("NO KEYS FOUND")
+
+    if len(obj["values"]) > 1:
+        print("MULTIPLE KEYS FOUND, RETURNING FIRST")
+
+    yagna_appkey = obj["values"][0][key_idx]
+    print(f"Your yagna appkey: {yagna_appkey}")
+    return yagna_appkey
+
 config_params = open_config()
 
 yagna_exe = config_params["yagna_executable"]
+
+
+create_app_key = False
+
+tries = 0
+while True:
+    if tries > 3:
+        raise Exception("Failed to obtain yagna key")
+    try:
+        yagna_app_key = extract_yagna_appkey(yagna_exe)
+        break
+    except Exception as ex:
+        if str(ex) == "NO KEYS FOUND":
+            create_app_key = True
+        else:
+            raise ex
+
+
+    if create_app_key:
+        create_yagna_appkey(yagna_exe)
+
+    tries += 1
+
+
 
 ya_runtime_vm_directory = config_params["step2"]["ya_runtime_vm_directory"]
 target_runtime_directory = r"plugins\ya-runtime-vm\runtime"
@@ -60,9 +118,9 @@ copy_file_local(os.path.join(source_yagna_directory, yaprovider_exe), target_yag
 
 payment_init_command = f".{os.path.sep}{yagna_exe} payment init --receiver --network rinkeby"
 print(payment_init_command)
-payment_init = Popen(payment_init_command, shell=True)
+payment_init = subprocess.Popen(payment_init_command, shell=True)
 
 
-with Popen(f".{os.path.sep}{yaprovider_exe} run", shell=True) as p1:
+with subprocess.Popen(f".{os.path.sep}{yaprovider_exe} run", shell=True) as p1:
     pass
 

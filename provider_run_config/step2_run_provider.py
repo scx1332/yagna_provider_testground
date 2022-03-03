@@ -92,6 +92,8 @@ def copy_file_local(srcDir, targetDir):
     # if os.path.isfile(srcDir):
     try:
         print("Copying and overwriting file: {} => {}".format(srcDir, targetDir))
+        if not os.path.isdir(targetDir):
+            os.makedirs(targetDir)
         shutil.copy2(srcDir, targetDir)
     except Exception as e:
         print(f"ERROR: while copying file {srcDir}, reason {e}")
@@ -108,6 +110,7 @@ copy_file_local(os.path.join(ya_runtime_vm_directory, "runtime", "init-container
 
 ya_runtime_vm_exe = config_params["ya_runtime_vm_executable"]
 
+copy_file_local(os.path.join(ya_runtime_vm_directory, "runtime", "conf", "ya-runtime-vm.json"), target_runtime_exe_directory)
 copy_file_local(os.path.join(ya_runtime_vm_directory, "target", "debug", ya_runtime_vm_exe), target_runtime_exe_directory)
 
 if platform.system() == "Windows":
@@ -128,6 +131,6 @@ print(payment_init_command)
 payment_init = subprocess.Popen(payment_init_command, shell=True)
 
 
-with subprocess.Popen(f".{os.path.sep}{yaprovider_exe} run", shell=True) as p1:
+with subprocess.Popen(f".{os.path.sep}{yaprovider_exe} run --app-key {yagna_app_key}", shell=True) as p1:
     pass
 

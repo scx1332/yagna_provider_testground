@@ -1,0 +1,8 @@
+{
+  "yagna_executable" : "yagna.exe",
+  "source_yagna_directory" : "C:/golem/yagna/target/debug",
+
+  "step3": {
+  }
+  
+}

@@ -1,10 +1,22 @@
 import os
 import shutil
 from subprocess import Popen
+import platform
+import json
 
-yagna_exe_path = r"yagna.exe"
+def open_config():
+    if platform.system() == "Linux":
+        config_path="config_linux.json"
+    else:
+        config_path="config.json"
 
-source_yagna_directory = r"C:\golem\yagna\target\debug"
+    with open(config_path, "r") as f:
+        return json.loads(f.read())
+
+config_params = open_config()
+
+yagna_exe = config_params["yagna_executable"]
+source_yagna_directory = config_params["source_yagna_directory"]
 target_yagna_directory = r"."
 
 def copy_file_local(srcDir, targetDir):
@@ -13,9 +25,11 @@ def copy_file_local(srcDir, targetDir):
         shutil.copy2(srcDir, targetDir)
 
 
-copy_file_local(os.path.join(source_yagna_directory, "yagna.exe"), target_yagna_directory)
+copy_file_local(os.path.join(source_yagna_directory, yagna_exe), target_yagna_directory)
 
-command = f"{yagna_exe_path} service run"
+command = f".{os.path.sep}{yagna_exe} service run"
 print(command)
-p1 = Popen(command, shell=True)
+
+with Popen(command, shell=True) as p1:
+    pass
 

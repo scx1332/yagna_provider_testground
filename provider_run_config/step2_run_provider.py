@@ -1,18 +1,11 @@
 import os
 import subprocess
-import shutil
 import platform
 import json
+import sys
 
-def open_config():
-    if platform.system() == "Linux":
-        config_path= os.path.join("..", "config_linux.json")
-    else:
-        config_path= os.path.join("..", "config.json")
-
-    with open(config_path, "r") as f:
-        return json.loads(f.read())
-
+sys.path.insert(1, os.path.join(sys.path[0], '..'))
+from common.common import copy_file_local, open_config
 
 
 def create_yagna_appkey(yagna_exe):
@@ -91,16 +84,6 @@ plugins_directory = "plugins"
 target_runtime_directory = os.path.join("plugins", "ya-runtime-vm", "runtime")
 target_runtime_exe_directory = os.path.join("plugins", "ya-runtime-vm")
 
-
-def copy_file_local(srcDir, targetDir):
-    # if os.path.isfile(srcDir):
-    try:
-        print("Copying and overwriting file: {} => {}".format(srcDir, targetDir))
-        if not os.path.isdir(targetDir):
-            os.makedirs(targetDir)
-        shutil.copy2(srcDir, targetDir)
-    except Exception as e:
-        print(f"ERROR: while copying file {srcDir}, reason {e}")
 
 qemu_executable = config_params["step2"]["qemu_executable"]
 

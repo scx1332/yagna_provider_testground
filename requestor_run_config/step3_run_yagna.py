@@ -1,17 +1,11 @@
 import os
 import shutil
 from subprocess import Popen
-import platform
-import json
+import sys 
 
-def open_config():
-    if platform.system() == "Linux":
-        config_path= os.path.join("..", "config_linux.json")
-    else:
-        config_path= os.path.join("..", "config.json")
+sys.path.insert(1, os.path.join(sys.path[0], '..'))
+from common.common import copy_file_local, open_config
 
-    with open(config_path, "r") as f:
-        return json.loads(f.read())
 
 
 config_params = open_config()

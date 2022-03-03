@@ -1,13 +1,18 @@
 import os
 import random
 import string
+import sys 
 
+sys.path.insert(1, os.path.join(sys.path[0], '..'))
+from common.common import open_config
 # run this script once to setup environment variables for provider
 
 
 randname = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
 
-SUBNET_NAME = "localtest"
+config = open_config()
+
+SUBNET_NAME = config["subnet"]
 NODE_NAME = f"prov_node_{randname}"
 GSB_PORT = 30401
 API_PORT = 30402

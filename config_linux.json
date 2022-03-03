@@ -2,10 +2,11 @@
   "yagna_executable" : "yagna",
   "ya_runtime_vm_executable" : "ya-runtime-vm",
   "yaprovider_exe": "ya-provider",
-  "source_yagna_directory" : "/home/szym/golem/yagna/target/debug",
   "exeunit_exe": "exe-unit",
   "gftp_exe": "gftp",
-
+  "subnet": "local_test",
+  
+  "source_yagna_directory" : "/home/szym/golem/yagna/target/debug",
   
   "step1": {
     "source_runtime_directory" : "/home/szym/golem/ya-runtime-vm/runtime/init-container"

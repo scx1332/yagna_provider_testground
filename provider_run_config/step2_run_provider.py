@@ -129,10 +129,12 @@ copy_file_local(os.path.join(source_yagna_directory, yaprovider_exe), target_yag
 
 
 payment_init_command = f".{os.path.sep}{yagna_exe} payment init --receiver --network rinkeby"
-print(payment_init_command)
+print(f"Running command: {payment_init_command}")
 payment_init = subprocess.Popen(payment_init_command, shell=True)
 
+command = f".{os.path.sep}{yaprovider_exe} run --app-key {yagna_app_key}"
+print(f"Running command {command}")
 
-with subprocess.Popen(f".{os.path.sep}{yaprovider_exe} run --app-key {yagna_app_key}", shell=True) as p1:
+with subprocess.Popen(command, shell=True) as p1:
     pass
 

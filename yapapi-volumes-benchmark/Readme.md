@@ -8,7 +8,7 @@ Run to install dependencies (especially yapapi)
 poetry install
 ```
 
-Check if you have money on your requestor account
+Check if you have assets on your requestor account using:
 ```
 yagna payment status
 ```
@@ -18,7 +18,7 @@ If not run
 yagna payment fund
 ```
 
-It should get you GLMs and ETH from faucet.
+It should get you GLMs and ETH from faucet. If faucet fails, you have to tranfer tokens to your test account manually.
 
 ```
 poetry run python volume_benchmark.py

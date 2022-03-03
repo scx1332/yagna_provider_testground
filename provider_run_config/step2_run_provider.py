@@ -114,6 +114,20 @@ copy_file_local(os.path.join(ya_runtime_vm_directory, "runtime", "init-container
 ya_runtime_vm_exe = config_params["ya_runtime_vm_executable"]
 
 copy_file_local(os.path.join(ya_runtime_vm_directory, "runtime", "conf", "ya-runtime-vm.json"), plugins_directory)
+
+
+#fix config file on windows (adding .exe to executable is needed)
+if platform.system() == "Windows":
+    with open(os.path.join(plugins_directory, "ya-runtime-vm.json"), "r") as fixFile:
+        text_to_fix = fixFile.read()
+
+    text_to_fix = text_to_fix.replace('"exe-unit"', '"exe-unit.exe"')
+    text_to_fix = text_to_fix.replace('"ya-runtime-vm/ya-runtime-vm"', '"ya-runtime-vm/ya-runtime-vm.exe"')
+
+    with open(os.path.join(plugins_directory, "ya-runtime-vm.json"), "w") as fixFile:
+        fixFile.write(text_to_fix)
+
+
 copy_file_local(os.path.join(ya_runtime_vm_directory, "target", "debug", ya_runtime_vm_exe), target_runtime_exe_directory)
 
 if platform.system() == "Windows":
@@ -129,6 +143,7 @@ source_yagna_directory = config_params["source_yagna_directory"]
 target_yagna_directory = "."
 copy_file_local(os.path.join(source_yagna_directory, exeunit_exe), plugins_directory)
 copy_file_local(os.path.join(source_yagna_directory, yaprovider_exe), target_yagna_directory)
+
 
 
 payment_init_command = f".{os.path.sep}{yagna_exe} payment init --receiver --network rinkeby"

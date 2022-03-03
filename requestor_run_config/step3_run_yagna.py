@@ -6,12 +6,13 @@ import json
 
 def open_config():
     if platform.system() == "Linux":
-        config_path="config_linux.json"
+        config_path= os.path.join("..", "config_linux.json")
     else:
-        config_path="config.json"
+        config_path= os.path.join("..", "config.json")
 
     with open(config_path, "r") as f:
         return json.loads(f.read())
+
 
 config_params = open_config()
 

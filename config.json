@@ -13,6 +13,7 @@
     "ya_runtime_vm_directory" : "C:/golem/ya-runtime-vm",
     "qemu_executable" : "qemu-system-x86_64.exe",
     "source_fileserver_directory" : "C:/scx1332/FileServer9p/rust-9p/example/unpfs/target/debug"
-  }
+  },
+  "step3":{}
 
 }

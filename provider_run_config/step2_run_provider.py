@@ -11,7 +11,7 @@ config_params = open_config()
 
 yagna_exe = config_params["yagna_executable"]
 
-set_yagna_app_key_to_env(yagna_exe)
+set_yagna_app_key_to_env(f".{os.path.sep}{yagna_exe}")
 
 ya_runtime_vm_directory = config_params["step2"]["ya_runtime_vm_directory"]
 

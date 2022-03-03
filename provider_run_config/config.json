@@ -2,6 +2,7 @@
   "yagna_executable" : "yagna.exe",
   "ya_runtime_vm_executable" : "ya-runtime-vm.exe",
   "yaprovider_exe": "ya-provider.exe",
+  "exeunit_exe": "exe-unit.exe",
   "source_yagna_directory" : "C:/golem/yagna/target/debug",
 
   "step1": {

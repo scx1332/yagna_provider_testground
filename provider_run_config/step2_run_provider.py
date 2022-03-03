@@ -86,6 +86,7 @@ while True:
 
 ya_runtime_vm_directory = config_params["step2"]["ya_runtime_vm_directory"]
 
+plugins_directory = "plugins"
 target_runtime_directory = os.path.join("plugins", "ya-runtime-vm", "runtime")
 target_runtime_exe_directory = os.path.join("plugins", "ya-runtime-vm")
 
@@ -112,7 +113,7 @@ copy_file_local(os.path.join(ya_runtime_vm_directory, "runtime", "init-container
 
 ya_runtime_vm_exe = config_params["ya_runtime_vm_executable"]
 
-copy_file_local(os.path.join(ya_runtime_vm_directory, "runtime", "conf", "ya-runtime-vm.json"), target_runtime_exe_directory)
+copy_file_local(os.path.join(ya_runtime_vm_directory, "runtime", "conf", "ya-runtime-vm.json"), plugins_directory)
 copy_file_local(os.path.join(ya_runtime_vm_directory, "target", "debug", ya_runtime_vm_exe), target_runtime_exe_directory)
 
 if platform.system() == "Windows":
@@ -121,10 +122,12 @@ if platform.system() == "Windows":
     copy_file_local(os.path.join(source_fileserver_directory, "ya-vm-file-server.exe"), target_fileserver_directory)
 
 yaprovider_exe = config_params["yaprovider_exe"]
+exeunit_exe = config_params["exeunit_exe"]
 
 
 source_yagna_directory = config_params["source_yagna_directory"]
 target_yagna_directory = "."
+copy_file_local(os.path.join(source_yagna_directory, exeunit_exe), plugins_directory)
 copy_file_local(os.path.join(source_yagna_directory, yaprovider_exe), target_yagna_directory)
 
 

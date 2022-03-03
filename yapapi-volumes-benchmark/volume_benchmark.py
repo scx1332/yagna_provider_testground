@@ -10,7 +10,7 @@ import subprocess
 import json
 import sys
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
-from common.common import open_config, get_or_create_yagna_key
+from common.common import open_config, set_yagna_app_key_to_env
 
 config = open_config()
 
@@ -56,7 +56,7 @@ if __name__ == "__main__":
 
     yagna_exe = "yagna"
 
-    get_or_create_yagna_key(yagna_exe)
+    set_yagna_app_key_to_env(yagna_exe)
 
     payment_init_command = f"{yagna_exe} payment init --sender --network rinkeby"
     print(f"Running command: {payment_init_command}")

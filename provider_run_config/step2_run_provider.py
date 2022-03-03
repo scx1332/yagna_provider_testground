@@ -5,78 +5,13 @@ import json
 import sys
 
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
-from common.common import copy_file_local, open_config
-
-
-def create_yagna_appkey(yagna_exe):
-    command = f".{os.path.sep}{yagna_exe} app-key create auto-provider-app-key"
-    print(f"Executing command {command}")
-    
-    proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    (out, err) = proc.communicate()
-    print(out)
-    pass
-
-
-def extract_yagna_appkey(yagna_exe):
-    command = f".{os.path.sep}{yagna_exe} app-key list --json"
-    print(f"Executing command {command}")
-    
-    proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    (out, err) = proc.communicate()
-    yagna_response = out.decode('utf-8').strip()
-    yagna_error = err.decode('utf-8').strip()
-
-    print(f"yagna_response: {yagna_response}")
-    
-    if yagna_error:
-        print(f"yagna_error: {yagna_error}")
-
-    if "Called service `/local/appkey/List` is unavailable" in yagna_error:
-        raise Exception("Probably cannot connect to yagna service. Check if yagna service is running.")
-
-    obj = json.loads(yagna_response)
-
-    key_idx = obj["headers"].index("key")
-
-    if len(obj["values"]) == 0:
-        raise Exception("NO KEYS FOUND")
-
-    if len(obj["values"]) > 1:
-        print("MULTIPLE KEYS FOUND, RETURNING FIRST")
-
-    yagna_appkey = obj["values"][0][key_idx]
-    print(f"Your yagna appkey: {yagna_appkey}")
-    return yagna_appkey
+from common.common import copy_file_local, open_config, set_yagna_app_key_to_env
 
 config_params = open_config()
 
 yagna_exe = config_params["yagna_executable"]
 
-
-create_app_key = False
-
-tries = 0
-while True:
-    if tries > 3:
-        raise Exception("Failed to obtain yagna key")
-    try:
-        yagna_app_key = extract_yagna_appkey(yagna_exe)
-        break
-    except Exception as ex:
-        if str(ex) == "NO KEYS FOUND":
-            create_app_key = True
-        else:
-            raise ex
-
-
-    if create_app_key:
-        create_yagna_appkey(yagna_exe)
-        print("Yagna app-key created")
-
-    tries += 1
-
-
+set_yagna_app_key_to_env(yagna_exe)
 
 ya_runtime_vm_directory = config_params["step2"]["ya_runtime_vm_directory"]
 
@@ -134,7 +69,7 @@ payment_init_command = f".{os.path.sep}{yagna_exe} payment init --receiver --net
 print(f"Running command: {payment_init_command}")
 payment_init = subprocess.Popen(payment_init_command, shell=True)
 
-command = f".{os.path.sep}{yaprovider_exe} run --app-key {yagna_app_key}"
+command = f".{os.path.sep}{yaprovider_exe} run"
 print(f"Running command {command}")
 
 with subprocess.Popen(command, shell=True) as p1:

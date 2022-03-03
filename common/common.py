@@ -69,7 +69,7 @@ def _extract_yagna_appkey(yagna_exe):
     return yagna_appkey
 
 
-def get_or_create_yagna_key(yagna_exe):
+def set_yagna_app_key_to_env(yagna_exe):
     tries = 0
     while True:
         create_app_key = False

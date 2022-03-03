@@ -54,7 +54,7 @@ async def main():
 if __name__ == "__main__":
     enable_default_logger(log_file="hello.log")
 
-    yagna_exe = "yagna"
+    yagna_exe = os.path.join("..", "requestor_run_config", "yagna")
 
     set_yagna_app_key_to_env(yagna_exe)
 

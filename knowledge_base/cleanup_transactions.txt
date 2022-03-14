@@ -1,0 +1,14 @@
+Cleanup transactions 
+
+UPDATE payment
+set
+tx_id = null,
+status = 1
+FROM
+    payment as p
+    INNER JOIN `transaction` AS t
+        ON p.tx_id = t.tx_id AND t.nonce > 57879
+where 
+    payment.tx_id = p.tx_id;
+    
+delete from `transaction` where nonce > 57879;

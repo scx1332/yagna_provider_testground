@@ -10,6 +10,8 @@ import subprocess
 import json
 import sys
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
+from datetime import datetime
+
 from common.common import open_config, set_yagna_app_key_to_env
 from yapapi import events
 from yapapi.rest.activity import CommandExecutionError
@@ -60,12 +62,22 @@ def submit_status(status, total_time=None):
         post_data = {'id': task_id, 'status': status, }
     #requests.post(url, data=post_data)
 
+
+provider_node = ""
+invoice_id = ""
+start_time = datetime.now()
+
 def event_consumer(event):
     if isinstance(event, events.AgreementCreated):
         agreements[event.agr_id] = [
             event.provider_id, event.provider_info.name]
+        global provider_node
+        provider_node = event.provider_info.name
+        print(f"Got agreement with: {event.provider_info.name}")
     elif isinstance(event, events.InvoiceReceived):
         print(f"Got invoice: {event.inv_id}")
+        global invoice_id
+        invoice_id = event.inv_id
     elif isinstance(event, events.TaskStarted):
         agreements[event.task_data] = datetime.now()
         submit_status_subtask(
@@ -125,3 +137,12 @@ if __name__ == "__main__":
     loop = asyncio.new_event_loop()
     task = loop.create_task(main())
     loop.run_until_complete(task)
+
+    job_descriptor = {}
+    job_descriptor["job_name"] = "volume_benchmark"
+    job_descriptor["job_quantity"] = 1.0
+    job_descriptor["job_time"] = (datetime.now() - start_time).total_seconds()
+
+
+    print(f"Finished: provider node: {provider_node}, invoice id: {invoice_id}")
+    print(json.dumps(job_descriptor))

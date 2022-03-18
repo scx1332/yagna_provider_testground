@@ -11,12 +11,14 @@ import json
 import sys
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 from common.common import open_config, set_yagna_app_key_to_env
+from yapapi import events
+from yapapi.rest.activity import CommandExecutionError
 
 config = open_config()
 
 SUBNET_NAME = config["subnet"]
 
-
+agreements = {}
 async def worker(ctx: WorkContext, tasks: AsyncIterable[Task]):
     script_dir = pathlib.Path(__file__).resolve().parent
     scene_path = str(script_dir / "vol_test_sent_to_provider.py")
@@ -35,6 +37,61 @@ async def worker(ctx: WorkContext, tasks: AsyncIterable[Task]):
 
         task.accept_result(result=await future_result)
 
+def submit_status_subtask(provider_name, provider_id, task_data, status, time=None):
+    url = 'http://api:8002/v1/status/subtask/blender'
+    task_id = os.getenv('TASKID')
+    if time:
+        post_data = {'id': task_id, 'status': status, 'provider': provider_name,
+                     'provider_id': provider_id, 'task_data': task_data, 'time': time}
+    else:
+        post_data = {'id': task_id, 'status': status,
+                     'provider': provider_name, 'provider_id': provider_id, 'task_data': task_data, }
+
+    #requests.post(url, data=post_data)
+
+
+def submit_status(status, total_time=None):
+    url = 'http://api:8002/v1/status/task/blender'
+    task_id = os.getenv('TASKID')
+    if total_time:
+        post_data = {'id': task_id, 'status': status,
+                     'time_spent': total_time}
+    else:
+        post_data = {'id': task_id, 'status': status, }
+    #requests.post(url, data=post_data)
+
+def event_consumer(event):
+    if isinstance(event, events.AgreementCreated):
+        agreements[event.agr_id] = [
+            event.provider_id, event.provider_info.name]
+    elif isinstance(event, events.InvoiceReceived):
+        print(f"Got invoice: {event.inv_id}")
+    elif isinstance(event, events.TaskStarted):
+        agreements[event.task_data] = datetime.now()
+        submit_status_subtask(
+            provider_name=agreements[event.agr_id][1], provider_id=agreements[event.agr_id][0], task_data=event.task_data, status="Computing")
+    elif isinstance(event, events.TaskFinished):
+        time_spent = datetime.now() - agreements[int(event.task_id)]
+        submit_status_subtask(
+            provider_name=agreements[event.agr_id][1], provider_id=agreements[event.agr_id][0], task_data=int(event.task_id), status="Finished", time=time_spent)
+    elif isinstance(event, events.WorkerFinished):
+        exc = event.exc_info
+        reason = str(exc) or repr(exc) or "unexpected error"
+        if isinstance(exc, CommandExecutionError):
+            submit_status_subtask(
+                provider_name=agreements[event.agr_id][1], provider_id=agreements[event.agr_id][0], task_data=event.job_id, status="Failed")
+    elif isinstance(event, events.ComputationFinished):
+        if not event.exc_info:
+            submit_status(status="Finished", total_time={
+                datetime.now() - start_time})
+        else:
+            _exc_type, exc, _tb = event.exc_info
+            if isinstance(exc, CancelledError):
+                submit_status(status="Cancelled", total_time={
+                    datetime.now() - start_time})
+            else:
+                submit_status(status="Failed", total_time={
+                    datetime.now() - start_time})
 
 async def main():
     package = await vm.repo(
@@ -46,7 +103,8 @@ async def main():
 
     async with Golem(budget=1.0,
                      subnet_tag=SUBNET_NAME,
-                     payment_network="rinkeby") as golem:
+                     payment_network="rinkeby",
+                     event_consumer=event_consumer) as golem:
         async for completed in golem.execute_tasks(worker, tasks, payload=package):
             print(completed.result.stdout)
 

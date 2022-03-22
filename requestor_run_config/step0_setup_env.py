@@ -14,10 +14,15 @@ SUBNET_NAME = config["subnet"]
 randname = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
 NODE_NAME = f"req_node_{randname}"
 
+GSB_PORT = config["requestor_port_gsb"]
+API_PORT = config["requestor_port_yagna"]
+
 with open(".env.template", "r") as f:
     template = f.read()
     template = template.replace("%%SUBNET%%", SUBNET_NAME)
     template = template.replace("%%NODE_NAME%%", NODE_NAME)
+    template = template.replace("%%GSB_PORT%%", str(GSB_PORT))
+    template = template.replace("%%API_PORT%%", str(API_PORT))    
     with open(".env", "w") as f2:
         f2.write(template)
 

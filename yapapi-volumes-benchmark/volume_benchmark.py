@@ -20,6 +20,15 @@ config = open_config()
 
 SUBNET_NAME = config["subnet"]
 
+GSB_PORT = config["requestor_port_gsb"]
+API_PORT = config["requestor_port_yagna"]
+
+os.environ["GSB_URL"] = f"tcp://127.0.0.1:{GSB_PORT}"
+os.environ["YAGNA_API_URL"] = f"http://127.0.0.1:{API_PORT}"
+#os.environ["YAGNA_MARKET_URL"] = f"http://127.0.0.1:{API_PORT}/market-api/v1/"
+#os.environ["YAGNA_ACTIVITY_URL"] = f"http://127.0.0.1:{API_PORT}/activity-api/v1/"
+#os.environ["YAGNA_PAYMENT_URL"] = f"http://127.0.0.1:{API_PORT}/payment-api/v1/"
+
 agreements = {}
 async def worker(ctx: WorkContext, tasks: AsyncIterable[Task]):
     script_dir = pathlib.Path(__file__).resolve().parent

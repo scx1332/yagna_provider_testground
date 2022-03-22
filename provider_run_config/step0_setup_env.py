@@ -14,8 +14,8 @@ config = open_config()
 
 SUBNET_NAME = config["subnet"]
 NODE_NAME = f"prov_node_{randname}"
-GSB_PORT = 30401
-API_PORT = 30402
+GSB_PORT = config["provider_port_gsb"]
+API_PORT = config["provider_port_yagna"]
 
 with open(".env.template", "r") as f:
     template = f.read()

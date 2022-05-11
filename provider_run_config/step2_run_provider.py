@@ -47,12 +47,12 @@ if platform.system() == "Windows":
         fixFile.write(text_to_fix)
 
 
-copy_file_local(os.path.join(ya_runtime_vm_directory, "target", "debug", ya_runtime_vm_exe), target_runtime_exe_directory)
+copy_file_local(os.path.join(ya_runtime_vm_directory, "target", "release", ya_runtime_vm_exe), target_runtime_exe_directory)
 
-if platform.system() == "Windows":
-    source_fileserver_directory = config_params["step2"]["source_fileserver_directory"]
-    target_fileserver_directory = r"plugins\ya-runtime-vm\runtime"
-    copy_file_local(os.path.join(source_fileserver_directory, "ya-vm-file-server.exe"), target_fileserver_directory)
+#if platform.system() == "Windows":
+#    source_fileserver_directory = config_params["step2"]["source_fileserver_directory"]
+#    target_fileserver_directory = r"plugins\ya-runtime-vm\runtime"
+#    copy_file_local(os.path.join(source_fileserver_directory, "ya-vm-file-server.exe"), target_fileserver_directory)
 
 yaprovider_exe = config_params["yaprovider_exe"]
 exeunit_exe = config_params["exeunit_exe"]

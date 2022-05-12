@@ -24,8 +24,12 @@ if config_params["requestor_data_limiter"]:
     data_limiter_path = config_params["data_limiter_path"]
     data_limiter_executable = config_params["data_limiter_executable"]
     copy_file_local(os.path.join(data_limiter_path, data_limiter_executable), ".")
-    command_data_limiter = f".{os.path.sep}{data_limiter_executable}"
+    limiter_port = config_params["requestor_data_limiter_port"]
+    listen_addr = f"127.0.0.1:{limiter_port}"
+    central_net_addr = config_params["central_net_addr"]
+    command_data_limiter = f".{os.path.sep}{data_limiter_executable} --listen-addr={listen_addr} --target-addr={central_net_addr}"
     print(command_data_limiter)
+    p2 = Popen(command_data_limiter, shell=True);
 
 
 

@@ -15,6 +15,7 @@ copy_file_local(os.path.join(central_net_path, central_exe), r".")
 
 central_net_addr = config_params["central_net_addr"]
 os.environ["GSB_URL"] = f"tcp://{central_net_addr}"
+os.environ["RUST_LOG"] = "debug"
 
 command = f".{os.path.sep}{central_exe}"
 print(command)

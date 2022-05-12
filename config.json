@@ -5,7 +5,10 @@
 	"exeunit_exe": "exe-unit.exe",
 	"gftp_exe": "gftp.exe",
 	"subnet": "scx_vm_subnet",
-
+  	"data_limiter_path": "C:/golem/ya-service-bus/target/debug",
+  	"data_limiter_executable": "data-limiter.exe",
+  	"requestor_data_limiter": true,
+    "requestor_data_limiter_port": 21444,
 	"source_yagna_directory" : "C:/golem/yagna/target/debug",
 	"provider_port_gsb" : 30401,
 	"provider_port_yagna" : 30402,

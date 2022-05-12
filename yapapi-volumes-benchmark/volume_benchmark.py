@@ -16,6 +16,13 @@ from common.common import open_config, set_yagna_app_key_to_env
 from yapapi import events
 from yapapi.rest.activity import CommandExecutionError
 
+from yapapi import (
+    Golem,
+    windows_event_loop_fix,
+    NoPaymentAccountError,
+    __version__ as yapapi_version,
+)
+
 config = open_config()
 
 SUBNET_NAME = config["subnet"]
@@ -30,6 +37,17 @@ os.environ["YAGNA_API_URL"] = f"http://127.0.0.1:{API_PORT}"
 #os.environ["YAGNA_PAYMENT_URL"] = f"http://127.0.0.1:{API_PORT}/payment-api/v1/"
 
 agreements = {}
+
+def print_env_info(golem: Golem):
+    print(
+        f"yapapi version: {yapapi_version}\n"
+        f"Using subnet: {golem.subnet_tag}, "
+        f"payment driver: {golem.payment_driver}, "
+        f"and network: {golem.payment_network}\n"
+    )
+
+
+
 async def worker(ctx: WorkContext, tasks: AsyncIterable[Task]):
     script_dir = pathlib.Path(__file__).resolve().parent
     scene_path = str(script_dir / "vol_test_sent_to_provider.py")
@@ -126,6 +144,7 @@ async def main():
                      subnet_tag=SUBNET_NAME,
                      payment_network="rinkeby",
                      event_consumer=event_consumer) as golem:
+        print_env_info(golem)
         async for completed in golem.execute_tasks(worker, tasks, payload=package):
             print(completed.result.stdout)
 
@@ -137,7 +156,7 @@ if __name__ == "__main__":
 
     set_yagna_app_key_to_env(yagna_exe)
 
-    payment_init_command = f"{yagna_exe} payment init --sender --network rinkeby"
+    payment_init_command = f"{yagna_exe} payment init --sender"
     print(f"Running command: {payment_init_command}")
     payment_init = subprocess.Popen(payment_init_command, shell=True)
     payment_init.communicate()

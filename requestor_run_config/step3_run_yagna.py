@@ -20,6 +20,14 @@ target_yagna_directory = r"."
 copy_file_local(os.path.join(source_yagna_directory, yagna_exe), target_yagna_directory)
 copy_file_local(os.path.join(source_yagna_directory, gftp_exe), target_yagna_directory)
 
+if config_params["requestor_data_limiter"]:
+    data_limiter_path = config_params["data_limiter_path"]
+    data_limiter_executable = config_params["data_limiter_executable"]
+    copy_file_local(os.path.join(data_limiter_path, data_limiter_executable), ".")
+    command_data_limiter = f".{os.path.sep}{data_limiter_executable}"
+    print(command_data_limiter)
+
+
 
 command = f".{os.path.sep}{yagna_exe} service run"
 print(command)

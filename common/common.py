@@ -56,15 +56,14 @@ def _extract_yagna_appkey(yagna_exe):
 
     obj = json.loads(yagna_response)
 
-    key_idx = obj["headers"].index("key")
 
-    if len(obj["values"]) == 0:
+    if len(obj) == 0:
         raise Exception("NO KEYS FOUND")
 
-    if len(obj["values"]) > 1:
+    if len(obj) > 1:
         print("MULTIPLE KEYS FOUND, RETURNING FIRST")
 
-    yagna_appkey = obj["values"][0][key_idx]
+    yagna_appkey = obj[0]["key"]
     print(f"Your yagna appkey: {yagna_appkey}")
     return yagna_appkey
 

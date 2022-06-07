@@ -9,7 +9,7 @@
     "central_router_exe": "ya-sb-router.exe",
     "central_net_addr": "127.0.0.1:21301",
     "use_own_central_net": true,
-  	"data_limiter_path": "C:/golem/ya-service-bus/target/debug",
+  	"data_limiter_path": "C:/golem/ya-service-bus/target/release",
   	"data_limiter_executable": "data-limiter.exe",
   	"requestor_data_limiter": true,
     "requestor_data_limiter_port": 21310,

@@ -1,0 +1,1 @@
+from .gminer import main

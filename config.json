@@ -5,7 +5,7 @@
 	"exeunit_exe": "exe-unit.exe",
 	"gftp_exe": "gftp.exe",
 	"subnet": "scx_vm_subnet",
-	"central_router_path": "C:/golem/ya-service-bus/target/debug",
+	"central_router_path": "C:/golem/ya-service-bus/target/release",
     "central_router_exe": "ya-sb-router.exe",
     "central_net_addr": "127.0.0.1:21301",
     "use_own_central_net": true,

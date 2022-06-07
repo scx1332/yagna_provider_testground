@@ -1,17 +1,18 @@
 {
   "ver": "V1",
   "active": [
-    "vm"
+	"bor"
   ],
   "presets": [
     {
-      "name": "vm",
-      "exeunit-name": "vm",
+      "name": "bor",
+      "exeunit-name": "bor-service",
       "pricing-model": "linear",
       "initial-price": 0.0,
       "usage-coeffs": {
-        "golem.usage.cpu_sec": 0.00001,
-        "golem.usage.duration_sec": 0.00001
+        "golem.usage.cpu_sec": 0.0,
+        "golem.usage.duration_sec": 0.0,
+		"http-auth.requests": 0.00001
       }
     }
   ]

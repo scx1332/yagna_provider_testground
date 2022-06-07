@@ -16,6 +16,7 @@
 	"requestor_data_limiter_api_port": 11222,
 	"provider_data_limiter": true,
 	"provider_data_limiter_port": 21320,
+  	"provider_data_limiter_api_port": 11333,
 	"source_yagna_directory" : "C:/golem/yagna/target/debug",
 	"provider_port_gsb" : 30401,
 	"provider_port_yagna" : 30402,

@@ -9,9 +9,9 @@ from yapapi.rest import market, activity
 from datetime import datetime, timezone
 from rich.console import Console
 from yapapi import props as yp
-from .ctx import *
-from .display import print_offer, print_invoice
-from .glmminingestimator import MiningEstimator
+from ctx import *
+from display import print_offer, print_invoice
+from glmminingestimator import MiningEstimator
 
 _FAKE_REQUEST = ExeUnitRequest(
     package_url="hash:sha3:9a3b5d67b0b27746283cb5f287c13eab1beaa12d92a9f536b747c7ae:http://yacn2.dev.golem.network:8000/local-image-c76719083b.gvmi"

@@ -5,7 +5,7 @@ from types import TracebackType
 from typing import Awaitable, Optional, Type
 
 from yapapi.rest import payment, market, activity, Configuration
-from .glmminingestimator import MiningEstimator
+from glmminingestimator import MiningEstimator
 
 
 @dataclass

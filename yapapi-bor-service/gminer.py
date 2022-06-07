@@ -18,9 +18,9 @@ from rich.table import Table
 from yapapi.log import enable_default_logger
 from yapapi.rest import Configuration, payment
 from yapapi.rest.activity import PollingBatch, Activity
-from .ctx import *
-from .discovery import find_workers
-from .glmminingestimator import MiningEstimator
+from ctx import *
+from discovery import find_workers
+from glmminingestimator import MiningEstimator
 from decimal import Decimal
 
 
@@ -272,22 +272,23 @@ def main():
 
     enable_default_logger()
     try:
-        me = MiningEstimator()
-        asyncio.get_event_loop().create_task(me.update_price_main_loop())
-        asyncio.get_event_loop().run_until_complete(
-            run_mining(
-                Configuration(),
-                mining_estimator=me,
-                subnet_tag=subnet,
-                pool=args.pool,
-                wallet=args.wallet,
-                pool_password=args.pool_password,
-                timeout=args.timeout,
-                testnet=(args.network == "mumbai"),
-				exeunit_name=exe_unit,
-                amount=Decimal(50),
+        if 0:
+            me = MiningEstimator()
+            asyncio.get_event_loop().create_task(me.update_price_main_loop())
+            asyncio.get_event_loop().run_until_complete(
+                run_mining(
+                    Configuration(),
+                    mining_estimator=me,
+                    subnet_tag=subnet,
+                    pool=args.pool,
+                    wallet=args.wallet,
+                    pool_password=args.pool_password,
+                    timeout=args.timeout,
+                    testnet=(args.network == "mumbai"),
+                    exeunit_name=exe_unit,
+                    amount=Decimal(50),
+                )
             )
-        )
     except asyncio.exceptions.CancelledError:
         print('!!! Cancel !!!')
         pass

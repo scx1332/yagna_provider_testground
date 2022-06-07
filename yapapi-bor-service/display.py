@@ -1,4 +1,3 @@
-from collections import Iterable
 
 from rich.console import Console
 from rich.table import Table
@@ -6,7 +5,7 @@ from yapapi.rest import payment, market
 import json
 
 
-def print_invoice(console: Console, invoices: "Iterable[payment.Invoice]"):
+def print_invoice(console: Console, invoices):
     table = Table("id", "issuer", "amount", "status")
     for invoice in invoices:
         table.add_row(invoice.invoice_id, invoice.issuer_id, invoice.amount, str(invoice.status))

@@ -7,7 +7,7 @@
   "from": "/bor",
   "to": "http://bor.golem.network",
   "cert": {
-    "path": "/secure/acme/certs/server.cert",
-    "keyPath": "/secure/acme/certs/server.key"
+    "path": "C:/scx1332/yagna_provider_testground/runtime_service_provider/plugins/ya-runtime-bor/services/server.cert",
+    "keyPath": "C:/scx1332/yagna_provider_testground/runtime_service_provider/plugins/ya-runtime-bor/services/server.key"
   }
 }

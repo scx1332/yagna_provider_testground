@@ -22,32 +22,37 @@ target_runtime_exe_directory = os.path.join("plugins", "ya-runtime-vm")
 
 qemu_executable = config_params["step2"]["qemu_executable"]
 
-copy_file_local(os.path.join(ya_runtime_vm_directory, "runtime", "poc", "runtime", "bios-256k.bin"), target_runtime_directory)
-copy_file_local(os.path.join(ya_runtime_vm_directory, "runtime", "poc", "runtime", "kvmvapic.bin"), target_runtime_directory)
-copy_file_local(os.path.join(ya_runtime_vm_directory, "runtime", "poc", "runtime", "linuxboot_dma.bin"), target_runtime_directory)
-copy_file_local(os.path.join(ya_runtime_vm_directory, "runtime", "poc", "runtime", qemu_executable), target_runtime_directory)
-copy_file_local(os.path.join(ya_runtime_vm_directory, "runtime", "image", "self-test.gvmi"), target_runtime_directory)
-copy_file_local(os.path.join(ya_runtime_vm_directory, "runtime", "init-container", "initramfs.cpio.gz"), target_runtime_directory)
-copy_file_local(os.path.join(ya_runtime_vm_directory, "runtime", "init-container", "vmlinuz-virt"), target_runtime_directory)
+#copy_file_local(os.path.join(ya_runtime_vm_directory, "runtime", "poc", "runtime", "bios-256k.bin"), target_runtime_directory)
+#copy_file_local(os.path.join(ya_runtime_vm_directory, "runtime", "poc", "runtime", "kvmvapic.bin"), target_runtime_directory)
+#copy_file_local(os.path.join(ya_runtime_vm_directory, "runtime", "poc", "runtime", "linuxboot_dma.bin"), target_runtime_directory)
+#copy_file_local(os.path.join(ya_runtime_vm_directory, "runtime", "poc", "runtime", qemu_executable), target_runtime_directory)
+#copy_file_local(os.path.join(ya_runtime_vm_directory, "runtime", "image", "self-test.gvmi"), target_runtime_directory)
+#copy_file_local(os.path.join(ya_runtime_vm_directory, "runtime", "init-container", "initramfs.cpio.gz"), target_runtime_directory)
+#copy_file_local(os.path.join(ya_runtime_vm_directory, "runtime", "init-container", "vmlinuz-virt"), target_runtime_directory)
 
-ya_runtime_vm_exe = config_params["ya_runtime_vm_executable"]
+ya_runtime_service_path = config_params["service_plugin_path"]
+ya_runtime_service_exe = config_params["service_plugin_exe"]
+ya_runtime_proxy_exe = config_params["service_proxy_exe"]
 
-copy_file_local(os.path.join(ya_runtime_vm_directory, "runtime", "conf", "ya-runtime-vm.json"), plugins_directory)
+bor_plugin_directory = os.path.join(plugins_directory, "ya-runtime-bor")
+
+copy_file_local(os.path.join(ya_runtime_service_path, ya_runtime_service_exe), bor_plugin_directory)
+copy_file_local(os.path.join(ya_runtime_service_path, ya_runtime_proxy_exe), bor_plugin_directory)
 
 
 #fix config file on windows (adding .exe to executable is needed)
-if platform.system() == "Windows":
-    with open(os.path.join(plugins_directory, "ya-runtime-vm.json"), "r") as fixFile:
-        text_to_fix = fixFile.read()
+#if platform.system() == "Windows":
+    #with open(os.path.join(plugins_directory, "ya-runtime-vm.json"), "r") as fixFile:
+    #    text_to_fix = fixFile.read()
 
-    text_to_fix = text_to_fix.replace('"exe-unit"', '"exe-unit.exe"')
-    text_to_fix = text_to_fix.replace('"ya-runtime-vm/ya-runtime-vm"', '"ya-runtime-vm/ya-runtime-vm.exe"')
+    #text_to_fix = text_to_fix.replace('"exe-unit"', '"exe-unit.exe"')
+    #text_to_fix = text_to_fix.replace('"ya-runtime-vm/ya-runtime-vm"', '"ya-runtime-vm/ya-runtime-vm.exe"')
 
-    with open(os.path.join(plugins_directory, "ya-runtime-vm.json"), "w") as fixFile:
-        fixFile.write(text_to_fix)
+    #with open(os.path.join(plugins_directory, "ya-runtime-vm.json"), "w") as fixFile:
+    #    fixFile.write(text_to_fix)
 
 
-copy_file_local(os.path.join(ya_runtime_vm_directory, "target", "release", ya_runtime_vm_exe), target_runtime_exe_directory)
+#copy_file_local(os.path.join(ya_runtime_vm_directory, "target", "release", ya_runtime_vm_exe), target_runtime_exe_directory)
 
 #if platform.system() == "Windows":
 #    source_fileserver_directory = config_params["step2"]["source_fileserver_directory"]

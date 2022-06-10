@@ -22,10 +22,11 @@ from ctx import *
 from discovery import find_workers
 from glmminingestimator import MiningEstimator
 from decimal import Decimal
-
+from common import set_yagna_app_key_to_env
+import logging
 
 async def extract_provider_name(agr: yapapi.rest.market.Agreement) -> Optional[str]:
-    agreement_details = await agr.details()
+    agreement_details = await agr.get_details()
     return agreement_details.provider_view.properties.get("golem.node.id.name") or "-"
 
 
@@ -89,20 +90,14 @@ async def try_send_offer(
     worker_name: str,
     pool_password: Optional[str],
 ):
-    args = [
-        "--pool",
-        pool,
-        "--wallet",
-        wallet,
-        "--worker-name",
-        worker_name,
-    ]
+    args = []
     if pool_password is not None:
         args.extend(["--password", pool_password])
 
     _cmds = [
         {"deploy": {}},
-        {"start": {"args": args}},
+        {"start": {}},
+    #    {"run": {"entry_point": "dupa", "args": ["user", "add", "u1", "pass1"]}},
     ]
     result: PollingBatch = await activity.send(_cmds)
     console.log(f"batch {activity.id} started, expires at {exp.astimezone()}")
@@ -120,23 +115,21 @@ async def try_send_offer(
         print("step=", step)
 
 
-async def run_mining(
+async def run_proxy(
     conf: Configuration,
-    mining_estimator: MiningEstimator,
     subnet_tag: str,
     pool: str,
     wallet: str,
     pool_password: str,
     timeout: int,
-    testnet: bool,
+    payment_platform: str,
     exeunit_name: str,
     amount: Decimal = Decimal(10),
 ):
     console = Console()
     requestor_id = get_requestor_id(conf)
-    payment_platform = "erc20-mumbai-tglm" if testnet else "erc20-polygon-glm"
-    console.log("platform=", payment_platform)
-    ctx = GolemCtx(conf, mining_estimator)
+    console.log(f"Starting proxy: platform={payment_platform}")
+    ctx = GolemCtx(conf)
 
     agreements = set()
 
@@ -193,7 +186,7 @@ async def run_mining(
             jobs = set()
 
             criteria = SearchCriteria(
-                name="miner+",
+                name="bor+",
                 allocation=allocation,
                 subnet=subnet_tag,
                 chunk_time=timedelta(minutes=timeout),
@@ -221,17 +214,17 @@ async def run_mining(
                                 )
                             )
                         )
-                        console.log("worker=", worker_name)
+                        logging.info("worker=", worker_name)
                         f_done, f_pending = await asyncio.wait(
                             services.union(jobs), timeout=0.1, return_when=asyncio.FIRST_COMPLETED
                         )
                         if len(f_done) > 1:
-                            console.log("done=", len(f_done))
+                            logging.info("done=", len(f_done))
 
                         services.difference_update(f_done)
                         jobs.difference_update(f_done)
                         if len(services) != 2:
-                            console.log("service failed, exiting")
+                            logging.info("service failed, exiting")
                             break
                 except asyncio.exceptions.CancelledError:
                     print(f"!!! Cancel !!! services={len(services)}, jobs={len(jobs)}")
@@ -243,13 +236,13 @@ def build_parser(description: str):
     parser.add_argument(
         "--driver", help="Payment driver name, for example `erc20`", default="erc20"
     )
-    parser.add_argument("--network", help="Network name, for example `goerli`", default="mumbai")
+    parser.add_argument("--network", help="Network name, for example `goerli`", default="rinkeby")
     parser.add_argument("--pool", default="staging-backend.chessongolem.app:3334")
     parser.add_argument("--wallet", default="0x5bc945a05ac36700f808f4d03e192f3b0d7eeb6d")
-    parser.add_argument("--timeout", default=5, help="mining timeout in minutes", type=int)
+    parser.add_argument("--timeout", default=30, help="mining timeout in minutes", type=int)
     parser.add_argument("--pool-password", default="x")
     parser.add_argument(
-        "--subnet-tag", default="ThorgSubnetTest", help="Subnet name; default: %(default)s"
+        "--subnet-tag", default="scx_vm_subnet", help="Subnet name; default: %(default)s"
     )
     parser.add_argument(
         "--exe-unit", default="gminer", help="gminer for ETH, hminer for ETC default: %(default)s"
@@ -270,25 +263,34 @@ def main():
     exe_unit = args.exe_unit
     sys.stderr.write(f"Using exe unit: {exe_unit}\n")
 
+    # Use automatic app key extraction for convenience
+    set_yagna_app_key_to_env("yagna");
+
+    if args.network == "mumbai":
+        payment_platform = "erc20-mumbai-tglm"
+    elif args.network == "polygon":
+        payment_platform = "erc20-polygon-glm"
+    elif args.network == "rinkeby":
+        payment_platform = "erc20-rinkeby-tglm"
+    else:
+        raise Exception("unsupported network")
+
+    #logging.basicConfig(filename='example.log', encoding='utf-8', level=logging.DEBUG)
     enable_default_logger()
     try:
-        if 0:
-            me = MiningEstimator()
-            asyncio.get_event_loop().create_task(me.update_price_main_loop())
-            asyncio.get_event_loop().run_until_complete(
-                run_mining(
-                    Configuration(),
-                    mining_estimator=me,
-                    subnet_tag=subnet,
-                    pool=args.pool,
-                    wallet=args.wallet,
-                    pool_password=args.pool_password,
-                    timeout=args.timeout,
-                    testnet=(args.network == "mumbai"),
-                    exeunit_name=exe_unit,
-                    amount=Decimal(50),
-                )
+        asyncio.run(
+            run_proxy(
+                Configuration(),
+                subnet_tag=subnet,
+                pool=args.pool,
+                wallet=args.wallet,
+                pool_password=args.pool_password,
+                timeout=args.timeout,
+                payment_platform=payment_platform,
+                exeunit_name=exe_unit,
+                amount=Decimal(50),
             )
+        )
     except asyncio.exceptions.CancelledError:
         print('!!! Cancel !!!')
         pass

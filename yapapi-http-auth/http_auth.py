@@ -9,6 +9,7 @@ import string
 import sys
 from typing import List
 from common import set_yagna_app_key_to_env
+import subprocess
 
 from yapapi import (
     Golem,
@@ -212,7 +213,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--running-time",
-        default=3600,
+        default=10*3600,
         type=int,
         help=(
             "How long should the instance run before the cluster is stopped "
@@ -221,6 +222,11 @@ if __name__ == "__main__":
     )
 
     set_yagna_app_key_to_env("yagna");
+
+    payment_init_command = f"yagna payment init --sender"
+    print(f"Running command: {payment_init_command}")
+    payment_init = subprocess.Popen(payment_init_command, shell=True)
+    payment_init.communicate()
 
     now = datetime.now().strftime("%Y-%m-%d_%H.%M.%S")
     parser.set_defaults(log_file=f"http-auth-yapapi-{now}.log")

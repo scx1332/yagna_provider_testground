@@ -65,6 +65,7 @@ def print_env_info(golem: Golem):
     )
 
 
+
 def run_golem_example(example_main, log_file=None):
     # This is only required when running on Windows with Python prior to 3.8:
     windows_event_loop_fix()

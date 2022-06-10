@@ -5,7 +5,6 @@ from types import TracebackType
 from typing import Awaitable, Optional, Type
 
 from yapapi.rest import payment, market, activity, Configuration
-from glmminingestimator import MiningEstimator
 
 
 @dataclass
@@ -19,16 +18,12 @@ class SearchCriteria:
 
 
 class GolemCtx(AbstractAsyncContextManager):
-    def __init__(self, conf: Configuration, mining_estimator: MiningEstimator):
+    def __init__(self, conf: Configuration):
         self._conf = conf
         self._exit_stack = AsyncExitStack()
         self._payment: Optional[payment.Payment] = None
         self._market: Optional[market.Market] = None
         self._activity: Optional[activity.ActivityService] = None
-        self._mining_estimator = mining_estimator
-
-    def miningEstimator(self):
-        return self._mining_estimator
 
     async def payment(self) -> payment.Payment:
         if self._payment is None:

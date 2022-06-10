@@ -32,8 +32,8 @@ async def find_workers(
         builder = DemandBuilder()
         builder.add(yp.NodeInfo(name=criteria.name, subnet_tag=criteria.subnet))
         builder.add(yp.Activity(expiration=expiration))
-        builder.add(_FAKE_REQUEST)
-        builder.ensure("(golem.runtime.name={})".format(exe_unit_name))
+        #builder.add(_FAKE_REQUEST)
+        builder.ensure("(golem.runtime.name={})".format("bor-service"))
         decoration = await payment_api.decorate_demand([criteria.allocation.id])
         for constraint in decoration.constraints:
             builder.ensure(constraint)
@@ -46,7 +46,7 @@ async def find_workers(
                 if event.is_draft:
                     agr = await event.create_agreement()
                     try:
-                        det = await agr.details()
+                        det = await agr.get_details()
                         if await agr.confirm():
                             new_activity = await activity_api.new_activity(agr.id)
                             print_offer(console, event, det)
@@ -75,11 +75,8 @@ async def find_workers(
                                 coeff_name = "starting_price"
 
                             src_coeff_value = linear_coeffs[idx]
-                            if coeff_name == "golem.usage.mining.hash":
-                                if exe_unit_name == "hminer":
-                                    target_coeff_value = ctx.miningEstimator().get_cached_glm_etc_hash()
-                                else:
-                                    target_coeff_value = ctx.miningEstimator().get_cached_glm_eth_hash()
+                            if coeff_name == "http-auth.requests":
+                                target_coeff_value = 0.0002
                             else:
                                 target_coeff_value = 0
                             if src_coeff_value != target_coeff_value:
